@@ -57,6 +57,7 @@
     .btn-shimmer:hover::after { left: 130%; }
     .payment-section { display: none; }
     .payment-section.active { display: block; }
+    .plan-tab.on { border-color: #00B094; background-color: #F0FDFA; color: #0F3B82; }
   </style>
 </head>
 <body class="antialiased selection:bg-brand-teal selection:text-white">
@@ -322,16 +323,17 @@
       
       <div class="bg-white rounded-3xl p-8 shadow-saas border border-slate-200 space-y-6">
         <h2 class="text-2xl font-extrabold text-brand-dark">Finaliza tu suscripción</h2>
-        
-        <!-- Pestañas de Métodos de Pago -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <button type="button" onclick="selectPaymentMethod('visa-mc')" id="btn-visa" class="p-3 border rounded-xl font-bold text-xs border-brand-teal bg-teal-50 text-brand-navy transition-all">Tarjeta (Visa)</button>
-          <button type="button" onclick="selectPaymentMethod('paypal')" id="btn-paypal" class="p-3 border rounded-xl font-bold text-xs border-slate-200 text-slate-600 transition-all">PayPal</button>
-          <button type="button" onclick="selectPaymentMethod('mercadopago')" id="btn-mp" class="p-3 border rounded-xl font-bold text-xs border-slate-200 text-slate-600 transition-all">Mercado Pago</button>
-          <button type="button" onclick="selectPaymentMethod('applepay')" id="btn-apple" class="p-3 border rounded-xl font-bold text-xs border-slate-200 text-slate-600 transition-all">Apple Pay</button>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" onclick="setPlan('trial')" id="tab-trial" class="plan-tab on p-3 border rounded-xl font-bold text-sm border-slate-200 text-slate-600 transition-all">Prueba gratis</button>
+          <button type="button" onclick="setPlan('direct')" id="tab-direct" class="plan-tab p-3 border rounded-xl font-bold text-sm border-slate-200 text-slate-600 transition-all">Plan mensual</button>
         </div>
+        <p id="co-sub" class="text-sm text-slate-600">No pagas nada hoy y cero tarjetas pedidas. Disfruta tus 14 días completos.</p>
+        <p class="flex justify-between border-t border-slate-200 pt-4 font-bold text-brand-dark">
+          <span>Total a pagar hoy</span>
+          <span id="due">$0.00</span>
+        </p>
 
-        <form onsubmit="alert('¡Proceso de pago simulado con éxito! Bienvenido a Mi Negocio.'); switchView('landing'); return false;" class="space-y-4">
+        <form onsubmit="alert(plan === 'trial' ? '¡Prueba gratis activada! Bienvenido a Mi Negocio.' : '¡Proceso de pago simulado con éxito! Bienvenido a Mi Negocio.'); switchView('landing'); return false;" class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Tu nombre completo</label>
             <input type="text" id="input-name" required oninput="updateCardName(this)" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm" placeholder="Ej. Blanca Leticia Argueta">
@@ -340,6 +342,15 @@
             <label class="block text-xs font-bold text-slate-700 mb-1">WhatsApp del negocio (+503)</label>
             <input type="text" required maxlength="9" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm" placeholder="7890-1234">
           </div>
+
+          <div id="payment-methods-container" class="space-y-4" style="display: none;">
+            <!-- Pestañas de Métodos de Pago -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button type="button" onclick="selectPaymentMethod('visa-mc')" id="btn-visa" class="p-3 border rounded-xl font-bold text-xs border-brand-teal bg-teal-50 text-brand-navy transition-all">Tarjeta (Visa)</button>
+              <button type="button" onclick="selectPaymentMethod('paypal')" id="btn-paypal" class="p-3 border rounded-xl font-bold text-xs border-slate-200 text-slate-600 transition-all">PayPal</button>
+              <button type="button" onclick="selectPaymentMethod('mercadopago')" id="btn-mp" class="p-3 border rounded-xl font-bold text-xs border-slate-200 text-slate-600 transition-all">Mercado Pago</button>
+              <button type="button" onclick="selectPaymentMethod('applepay')" id="btn-apple" class="p-3 border rounded-xl font-bold text-xs border-slate-200 text-slate-600 transition-all">Apple Pay</button>
+            </div>
 
           <!-- 1. Sección Tarjeta con Tarjeta Interactiva en Tiempo Real -->
           <div id="sec-visa-mc" class="payment-section active space-y-4">
@@ -397,9 +408,10 @@
                <strong>Apple Pay listo:</strong> Usa tu dispositivo Apple para confirmar de forma biométrica instantánea.
             </div>
           </div>
+          </div>
 
           <button type="submit" class="w-full btn-shimmer bg-brand-green hover:bg-brand-greenHover text-brand-dark font-extrabold py-4 rounded-xl shadow transition-all">
-            Pagar $12.00 / mes y activar
+            <span id="co-btn">Activar mis 14 días gratis</span>
           </button>
         </form>
       </div>
@@ -416,10 +428,28 @@
 
   <!-- JAVASCRIPT CON VALIDACIÓN DE DÍGITOS Y TARJETA EN TIEMPO REAL -->
   <script>
+    let plan = 'trial';
+
     function switchView(view) {
       document.getElementById('landing-view').classList.toggle('hidden', view === 'checkout');
       document.getElementById('checkout-view').classList.toggle('hidden', view !== 'checkout');
       window.scrollTo(0, 0);
+    }
+
+    function setPlan(mode) {
+      plan = mode;
+      const trial = mode === 'trial';
+      document.getElementById('tab-trial').classList.toggle('on', trial);
+      document.getElementById('tab-direct').classList.toggle('on', !trial);
+      document.getElementById('due').textContent = trial ? '$0.00' : '$13.56';
+
+      const payContainer = document.getElementById('payment-methods-container');
+      payContainer.style.display = trial ? 'none' : 'block';
+
+      document.getElementById('co-btn').textContent = trial ? 'Activar mis 14 días gratis' : 'Pagar $13.56 y activar';
+      document.getElementById('co-sub').textContent = trial
+        ? 'No pagas nada hoy y cero tarjetas pedidas. Disfruta tus 14 días completos.'
+        : 'Se cobran $12.00 más $1.56 de IVA mensual. Puedes cancelar cuando gustes.';
     }
 
     function runDemo(id) {
@@ -478,6 +508,8 @@
     function fmtCvv(el) {
       el.value = el.value.replace(/\D/g, '').slice(0, 4);
     }
+
+    setPlan('trial');
   </script>
 </body>
 </html>
