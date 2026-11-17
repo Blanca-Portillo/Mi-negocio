@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Negocio | Tu negocio, a un audio de distancia</title>
+  <!-- Google Fonts: Plus Jakarta Sans (Display) + Inter (UI/Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              navy: '#0F3B82',
+              dark: '#081E45',
+              teal: '#00B094',
+              green: '#2ECC71',
+              greenHover: '#25B863',
+              surface: '#F8FAFC',
+              border: '#E2E8F0'
+            }
+          },
+          boxShadow: {
+            'saas': '0 20px 40px -15px rgba(15, 59, 130, 0.08), 0 4px 12px -2px rgba(15, 59, 130, 0.04)',
+            'glow': '0 0 40px -10px rgba(0, 176, 148, 0.35)',
+            'card3d': '0 25px 50px -12px rgba(8, 30, 69, 0.45)'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FFFFFF;
+      color: #0F172A;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, .font-display {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -0.03em;
+    }
+
+    /* Patrón Dot-Grid estilo Linear / Vercel */
+    .bg-dot-grid {
+      background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .bg-dot-grid-dark {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Mesh Gradient Hero */
+    .hero-mesh {
+      background:
+        radial-gradient(at 85% 15%, rgba(0, 176, 148, 0.14) 0px, transparent 50%),
+        radial-gradient(at 15% 10%, rgba(15, 59, 130, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 80%, rgba(46, 204, 113, 0.08) 0px, transparent 50%);
+    }
+
+    /* Fondo patrón sutil estilo WhatsApp */
+    .wa-wallpaper {
+      background-color: #EFEAE2;
+      background-image: radial-gradient(#CBD5E1 0.85px, transparent 0.85px);
+      background-size: 16px 16px;
+    }
+
+    /* Ondas de audio animadas */
+    @keyframes soundWave {
+      0%, 100% { transform: scaleY(0.35); }
+      50% { transform: scaleY(1); }
+    }
+    .wave-bar {
+      animation: soundWave 1.1s infinite ease-in-out;
+      transform-origin: center;
+    }
+    .wave-bar:nth-child(2) { animation-delay: 0.12s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.24s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.36s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.48s; }
+    .wave-bar:nth-child(6) { animation-delay: 0.60s; }
+    .wave-bar:nth-child(7) { animation-delay: 0.20s; }
+    .wave-bar:nth-child(8) { animation-delay: 0.40s; }
+
+    /* Animaciones suaves de aparición al hacer scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Efecto shimmer en botón principal */
+    .btn-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-shimmer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      transition: left 0.6s ease;
+    }
+    .btn-shimmer:hover::after {
+      left: 130%;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-brand-teal selection:text-white">
+
+  <!-- =====================================================================
+       NAVBAR FLOTANTE GLASSMORPHISM (ESTILO VERCEL / LINEAR)
+       ===================================================================== -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/80 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-18 py-3.5">
+        <!-- Logotipo SVG Oficial "Mi Negocio" -->
+        <a href="#" onclick="switchView('landing')" class="flex items-center gap-3 group focus:outline-none">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-navy to-brand-teal p-[1.5px] shadow-sm group-hover:scale-105 transition-transform">
+            <div class="w-full h-full bg-white rounded-[10.5px] flex items-center justify-center">
+              <svg class="w-7 h-7" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="logoGrad" x1="8" y1="7" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#0F3B82"/>
+                    <stop offset="1" stop-color="#00B094"/>
+                  </linearGradient>
+                </defs>
+                <!-- Toldo comercial -->
+                <path d="M8 14L12 7H36L40 14H8Z" fill="url(#logoGrad)"/>
+                <path d="M8 14C8 16.5 10.2 18.5 13 18.5C15.8 18.5 18 16.5 18 14H8Z" fill="#0F3B82"/>
+                <path d="M18 14C18 16.5 20.2 18.5 23 18.5C25.8 18.5 28 16.5 28 14H18Z" fill="#00B094"/>
+                <path d="M28 14C28 16.5 30.2 18.5 33 18.5C35.8 18.5 38 16.5 38 14H28Z" fill="#0F3B82"/>
+                <!-- Marco tienda -->
+                <path d="M11 21.5V36C11 38.2 12.8 40 15 40H33C35.2 40 37 38.2 37 36V21.5" stroke="#0F3B82" stroke-width="2.8" stroke-linecap="round"/>
+                <!-- Barras y flecha ascendente -->
+                <rect x="16" y="31" width="3.5" height="5" rx="1" fill="#00B094"/>
+                <rect x="22.25" y="27" width="3.5" height="9" rx="1" fill="#2ECC71"/>
+                <rect x="28.5" y="23" width="3.5" height="13" rx="1" fill="#2ECC71"/>
+                <path d="M15 28.5L23.5 23.5L32.5 18.5M32.5 18.5H27.5M32.5 18.5V23.5" stroke="#2ECC71" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-baseline leading-none font-display">
+              <span class="text-xl font-extrabold text-brand-navy">Mi</span>
+              <span class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-teal to-brand-green ml-1">negocio</span>
+            </div>
+            <span class="text-[11px] font-medium text-slate-500 mt-0.5">Tu negocio en buenas manos.</span>
+          </div>
+        </a>
+
+        <!-- Enlaces Desktop -->
+        <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-slate-600">
+          <a href="#problema" onclick="switchView('landing')" class="hover:text-brand-navy transition-colors">Problema</a>
+          <a href="#demo-ia" onclick="switchView('landing')" class="hover:text-brand-navy transition-colors">Demo IA</a>
+          <a href="#como-funciona" onclick="switchView('landing')" class="hover:text-brand-navy transition-colors">Cómo funciona</a>
+          <a href="#precios" onclick="switchView('landing')" class="hover:text-brand-navy transition-colors">Precios</a>
+          <a href="#faq" onclick="switchView('landing')" class="hover:text-brand-navy transition-colors">FAQ</a>
+        </nav>
+
+        <!-- Botones Derecha -->
+        <div class="flex items-center gap-2.5">
+          <button onclick="switchView('checkout', 'direct')" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100/90 hover:bg-slate-200/80 border border-slate-200/90 px-3.5 py-2.5 rounded-xl transition-all">
+            <svg class="w-4 h-4 text-brand-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+            <span>Checkout / Pagar</span>
+          </button>
+          <button onclick="switchView('checkout', 'trial')" class="btn-shimmer bg-gradient-to-r from-brand-navy to-[#164EA8] hover:from-brand-dark hover:to-brand-navy text-white font-semibold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-xl shadow-md shadow-brand-navy/20 transition-all">
+            Probar 14 días gratis
+          </button>
+          <button onclick="toggleMobileMenu()" aria-label="Menú" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú Móvil -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white/95 backdrop-blur-xl border-t border-slate-200 px-4 pt-3 pb-5 space-y-1.5 shadow-xl">
+      <a href="#problema" onclick="toggleMobileMenu(); switchView('landing')" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Problema y Solución</a>
+      <a href="#demo-ia" onclick="toggleMobileMenu(); switchView('landing')" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Demo IA en Vivo</a>
+      <a href="#como-funciona" onclick="toggleMobileMenu(); switchView('landing')" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Cómo funciona</a>
+      <a href="#precios" onclick="toggleMobileMenu(); switchView('landing')" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Precios</a>
+      <a href="#faq" onclick="toggleMobileMenu(); switchView('landing')" class="block py-2.5 px-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50">Preguntas Frecuentes</a>
+      <button onclick="toggleMobileMenu(); switchView('checkout', 'trial')" class="w-full mt-2 py-3 px-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-brand-teal to-brand-green text-center shadow">
+        Ir al Checkout / Prueba Gratis →
+      </button>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       VISTA 1: LANDING PAGE SAAS (8 SECCIONES DEL EMBUDO AIDA)
+       ===================================================================== -->
+  <main id="landing-view">
+
+    <!-- -------------------------------------------------------------------
+         1. HERO SECTION (PRIMERA IMPRESIÓN - ESTILO STRIPE / LINEAR)
+         ------------------------------------------------------------------- -->
+    <section class="relative bg-dot-grid hero-mesh pt-12 pb-20 sm:pt-20 sm:pb-28 border-b border-slate-200/70 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          <!-- Columna Izquierda: Copy de Alto Impacto -->
+          <div class="lg:col-span-7 text-center lg:text-left">
+            <!-- Pill Badge con brillo -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-sm text-xs sm:text-sm font-semibold text-brand-navy mb-6">
+              <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-green opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-green"></span>
+              </span>
+              <span>✨ IA Conversacional en WhatsApp • Hecho para MYPES en El Salvador</span>
+            </div>
+
+            <h1 class="text-4xl sm:text-5xl lg:text-[62px] font-extrabold text-brand-dark leading-[1.08] mb-6">
+              Tu negocio, a un <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-navy via-brand-teal to-brand-green">audio de distancia.</span>
+            </h1>
+
+            <p class="text-base sm:text-xl text-slate-600 leading-relaxed mb-8 max-w-2xl mx-auto lg:mx-0 font-normal">
+              Registra tus ventas y controla tu inventario hablando por WhatsApp como lo haces todos los días. Sin cuadernos tachados, sin instalar apps nuevas y sin saber de contabilidad.
+            </p>
+
+            <!-- Doble CTA Moderno -->
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 mb-8">
+              <button onclick="switchView('checkout', 'trial')" class="btn-shimmer w-full sm:w-auto bg-gradient-to-r from-brand-teal to-brand-green hover:brightness-105 text-white font-bold text-base px-8 py-4 rounded-2xl shadow-lg shadow-brand-teal/25 transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                <span>Empezar prueba gratis de 14 días</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+              </button>
+              <a href="#demo-ia" class="w-full sm:w-auto bg-white/90 hover:bg-white text-brand-dark font-semibold text-base px-7 py-4 rounded-2xl border border-slate-200 hover:border-slate-300 shadow-sm transition-all flex items-center justify-center gap-2">
+                <svg class="w-5 h-5 text-brand-navy" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                <span>Ver demo interactiva</span>
+              </a>
+            </div>
+
+            <!-- Trust Strip -->
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 text-xs sm:text-sm text-slate-500 font-medium">
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-brand-teal" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Sin tarjeta de crédito para iniciar
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-brand-teal" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                Listo en 2 minutos
+              </span>
+              <span class="flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-brand-teal" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                Datos 100% cifrados
+              </span>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Smartphone Titanio OLED + Dynamic Island + Floating Glass Cards -->
+          <div class="lg:col-span-5 flex justify-center relative">
+            <!-- Tarjeta Flotante Superior Izquierda -->
+            <div class="hidden sm:flex items-center gap-3 bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-saas rounded-2xl px-4 py-3 absolute -left-6 top-10 z-20">
+              <div class="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center font-bold text-base">📈</div>
+              <div>
+                <p class="text-xs font-extrabold text-brand-dark">+15% ganancias semanales</p>
+                <p class="text-[11px] text-slate-500">Reporte automático cada domingo</p>
+              </div>
+            </div>
+
+            <!-- Tarjeta Flotante Inferior Derecha -->
+            <div class="hidden sm:flex items-center gap-3 bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-saas rounded-2xl px-4 py-3 absolute -right-4 bottom-12 z-20">
+              <div class="w-9 h-9 rounded-xl bg-brand-navy/10 text-brand-navy flex items-center justify-center font-bold text-base">📓</div>
+              <div>
+                <p class="text-xs font-extrabold text-brand-dark">0 cuadernos ni Excel</p>
+                <p class="text-[11px] text-slate-500">Todo guardado en la nube</p>
+              </div>
+            </div>
+
+            <!-- Smartphone Frame Titanio Oscuro -->
+            <div class="relative w-full max-w-[335px] bg-gradient-to-b from-slate-800 via-slate-900 to-black rounded-[3rem] p-[11px] shadow-card3d border border-slate-700/80">
+              <!-- Pantalla OLED -->
+              <div class="bg-white rounded-[2.35rem] overflow-hidden relative">
+                <!-- Dynamic Island + Status Bar -->
+                <div class="bg-[#075E54] pt-2.5 pb-1 px-6 flex items-center justify-between text-[10px] text-white/90 font-semibold">
+                  <span>10:25</span>
+                  <div class="w-24 h-5 bg-black rounded-full flex items-center justify-end px-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  </div>
+                  <span>5G • 100%</span>
+                </div>
+
+                <!-- Header WhatsApp -->
+                <div class="bg-[#075E54] text-white px-4 py-3 flex items-center gap-3 shadow-sm">
+                  <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shrink-0 shadow-inner">
+                    <span class="font-display font-extrabold text-brand-navy text-xs">MN</span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-1">
+                      <p class="font-bold text-sm truncate">Mi Negocio IA</p>
+                      <svg class="w-4 h-4 text-[#25D366] shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <p class="text-[11px] text-emerald-200">en línea • Asesor virtual activo</p>
+                  </div>
+                </div>
+
+                <!-- Cuerpo del Chat -->
+                <div class="wa-wallpaper p-3.5 space-y-3 text-xs">
+                  <!-- Nota de voz enviada -->
+                  <div class="ml-auto max-w-[86%] bg-[#DCF8C6] rounded-2xl rounded-tr-sm p-3 shadow-sm">
+                    <div class="flex items-center gap-2.5 mb-1.5">
+                      <div class="w-7 h-7 rounded-full bg-brand-teal text-white flex items-center justify-center shrink-0">
+                        <svg class="w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
+                      </div>
+                      <div class="flex items-center gap-1 h-5 flex-1">
+                        <span class="w-1 h-3 bg-brand-navy/70 rounded-full wave-bar"></span>
+                        <span class="w-1 h-5 bg-brand-navy rounded-full wave-bar"></span>
+                        <span class="w-1 h-2.5 bg-brand-navy/60 rounded-full wave-bar"></span>
+                        <span class="w-1 h-4 bg-brand-navy/85 rounded-full wave-bar"></span>
+                        <span class="w-1 h-5 bg-brand-navy rounded-full wave-bar"></span>
+                        <span class="w-1 h-3 bg-brand-navy/70 rounded-full wave-bar"></span>
+                        <span class="w-1 h-4 bg-brand-navy/85 rounded-full wave-bar"></span>
+                        <span class="w-1 h-2.5 bg-brand-navy/60 rounded-full wave-bar"></span>
+                      </div>
+                      <span class="text-[10px] font-bold text-slate-600">0:07</span>
+                    </div>
+                    <p class="text-[11px] italic text-slate-700 bg-white/70 rounded-lg px-2.5 py-1">
+                      "Vendí 3 bolsas de arroz y 2 aceites"
+                    </p>
+                    <div class="text-right text-[10px] text-slate-500 mt-1">10:25 a. m. <span class="text-sky-500 font-bold">✓✓</span></div>
+                  </div>
+
+                  <!-- Respuesta IA Instantánea -->
+                  <div class="mr-auto max-w-[92%] bg-white rounded-2xl rounded-tl-sm p-3 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between mb-1.5">
+                      <span class="font-bold text-brand-navy">✅ ¡Listo! Venta anotada</span>
+                      <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">+$8.25</span>
+                    </div>
+                    <div class="space-y-1 text-slate-600 text-[11px] mb-2">
+                      <p>• 3x Bolsa de Arroz Blanco — <strong>$3.75</strong></p>
+                      <p>• 2x Botella de Aceite — <strong>$4.50</strong></p>
+                    </div>
+                    <div class="bg-amber-50/90 border border-amber-200/80 rounded-xl p-2 text-[11px]">
+                      <p class="font-bold text-amber-800">⚠️ Alerta de stock bajo:</p>
+                      <p class="text-amber-700">Te quedan solo <strong>2 botellas de aceite</strong>.</p>
+                    </div>
+                    <div class="text-right text-[10px] text-slate-400 mt-1">10:25 a. m.</div>
+                  </div>
+                </div>
+
+                <!-- Input Bar -->
+                <div class="bg-[#F0F2F5] px-3 py-2.5 flex items-center gap-2">
+                  <div class="flex-1 bg-white rounded-full px-3.5 py-2 text-[11px] text-slate-400 shadow-inner">
+                    Toca el micrófono y habla...
+                  </div>
+                  <div class="w-9 h-9 rounded-full bg-[#00A884] text-white flex items-center justify-center shadow">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z" clip-rule="evenodd"/></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         2. PROBLEMA Y SOLUCIÓN (BENTO GRID COMPARATIVO)
+         ------------------------------------------------------------------- -->
+    <section id="problema" class="py-20 sm:py-28 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="inline-block text-brand-teal font-bold text-xs uppercase tracking-widest mb-2">El problema real del día a día</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-brand-dark leading-tight mb-4">
+            ¿Sigues luchando con cuadernos tachados o cuentas de memoria?
+          </h2>
+          <p class="text-slate-600 text-base sm:text-lg">
+            Atender tu negocio ya exige todo tu esfuerzo. No deberías perder tus noches sumando recibos ni adivinando cuánto ganaste.
+          </p>
+        </div>
+
+        <!-- Bento Grid 2 Columnas Contrastantes -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          
+          <!-- Tarjeta Izquierda: El Método Tradicional (5 cols) -->
+          <div class="lg:col-span-5 bg-slate-50 rounded-3xl p-8 border border-slate-200/90 flex flex-col justify-between">
+            <div>
+              <div class="inline-flex items-center gap-2 bg-rose-100/80 text-rose-700 font-bold text-xs px-3 py-1 rounded-full mb-5">
+                <span>❌ Método Tradicional</span>
+              </div>
+              <h3 class="text-2xl font-extrabold text-slate-900 mb-3">Cuaderno, lápiz y memoria</h3>
+              <p class="text-sm text-slate-600 mb-6">El sistema de siempre que te hace perder tiempo y dinero sin darte cuenta:</p>
+
+              <ul class="space-y-4 text-sm text-slate-700">
+                <li class="flex items-start gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/70">
+                  <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 font-bold text-xs">✕</span>
+                  <div>
+                    <p class="font-bold text-slate-900">Tachones y ventas olvidadas</p>
+                    <p class="text-xs text-slate-500 mt-0.5">En hora pico no da tiempo de apuntar y al final del día falta dinero.</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/70">
+                  <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 font-bold text-xs">✕</span>
+                  <div>
+                    <p class="font-bold text-slate-900">Cansancio haciendo sumas de noche</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Pierdes hasta 45 minutos diarios con calculadora cuando quieres descansar.</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/70">
+                  <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 font-bold text-xs">✕</span>
+                  <div>
+                    <p class="font-bold text-slate-900">Te quedas sin producto estrella</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Te das cuenta de que se acabó cuando el cliente ya te lo pidió.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tarjeta Derecha: La Era Mi Negocio (7 cols) -->
+          <div class="lg:col-span-7 bg-gradient-to-br from-brand-dark via-brand-navy to-[#14499E] rounded-3xl p-8 sm:p-10 text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
+            <div class="absolute inset-0 bg-dot-grid-dark opacity-50 pointer-events-none"></div>
+            <div class="relative z-10">
+              <div class="inline-flex items-center gap-2 bg-brand-green/20 border border-brand-green/40 text-brand-green font-bold text-xs px-3.5 py-1 rounded-full mb-5">
+                <span>⚡ La Era Mi Negocio</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-extrabold mb-3">Tu asesor inteligente en WhatsApp</h3>
+              <p class="text-sm sm:text-base text-blue-100/90 mb-8 max-w-xl">
+                Sin hojas de cálculo ni sistemas complicados de oficina. Solo hablas y nosotros ordenamos todo por ti:
+              </p>
+
+              <!-- Bento Cards Internas -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
+                  <div class="text-2xl mb-2">🎙️</div>
+                  <p class="font-bold text-sm mb-1">Registro en 5 seg.</p>
+                  <p class="text-xs text-blue-100/80">Dicta tu venta o compra en un audio corto y listo.</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
+                  <div class="text-2xl mb-2">💵</div>
+                  <p class="font-bold text-sm mb-1">Ganancia exacta</p>
+                  <p class="text-xs text-blue-100/80">Calculamos ingresos vs. gastos automáticamente.</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4">
+                  <div class="text-2xl mb-2">🔔</div>
+                  <p class="font-bold text-sm mb-1">Alertas de stock</p>
+                  <p class="text-xs text-blue-100/80">Te avisamos antes de que se agote tu mercancía.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/15">
+              <p class="text-xs sm:text-sm text-blue-100 font-medium">
+                "Tú atiendes tu negocio. Nosotros cuidamos tus cuentas."
+              </p>
+              <button onclick="switchView('checkout', 'trial')" class="w-full sm:w-auto bg-brand-green hover:bg-brand-greenHover text-brand-dark font-extrabold text-sm px-6 py-3.5 rounded-xl shadow-lg transition-all shrink-0">
+                Probar 14 días gratis →
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         3. MOCKUP DEL PRODUCTO & DEMO INTERACTIVA EN VIVO (DESEO)
+         ------------------------------------------------------------------- -->
+    <section id="demo-ia" class="py-20 sm:py-28 bg-brand-surface bg-dot-grid border-y border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="text-center max-w-3xl mx-auto mb-14">
+          <span class="inline-block bg-brand-teal/10 text-brand-teal font-bold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full mb-3">
+            Simulador Interactivo en Vivo
+          </span>
+          <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-brand-dark mb-4">
+            Experimenta cómo la IA entiende tu negocio
+          </h2>
+          <p class="text-slate-600 text-base">
+            Haz clic en cualquiera de las <strong>3 notas de voz reales</strong> de abajo y observa cómo responde WhatsApp y cómo se actualiza tu panel financiero en tiempo real.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Panel Izquierdo (7 cols): Selector de Audios + Simulador WhatsApp -->
+          <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 shadow-saas border border-slate-200/90">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              
+              <!-- Controles de Audio (6 cols) -->
+              <div class="md:col-span-6 space-y-3">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">1. Selecciona un audio para enviar:</p>
+
+                <button onclick="runDemoScenario(1)" id="demo-btn-1" class="demo-btn w-full text-left p-4 rounded-2xl border-2 border-brand-teal bg-teal-50/40 transition-all group">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-extrabold text-brand-teal uppercase">Venta rápida</span>
+                    <span class="text-[11px] font-mono text-slate-400">0:07s</span>
+                  </div>
+                  <p class="text-sm font-bold text-brand-dark group-hover:text-brand-navy">"Vendí 3 bolsas de arroz y 2 botellas de aceite"</p>
+                </button>
+
+                <button onclick="runDemoScenario(2)" id="demo-btn-2" class="demo-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200/80 hover:border-slate-300 bg-white transition-all group">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-extrabold text-brand-navy uppercase">Entrada de mercancía</span>
+                    <span class="text-[11px] font-mono text-slate-400">0:06s</span>
+                  </div>
+                  <p class="text-sm font-bold text-brand-dark group-hover:text-brand-navy">"Entraron 20 libras de frijoles y 15 sodas"</p>
+                </button>
+
+                <button onclick="runDemoScenario(3)" id="demo-btn-3" class="demo-btn w-full text-left p-4 rounded-2xl border-2 border-slate-200/80 hover:border-slate-300 bg-white transition-all group">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-extrabold text-brand-green uppercase">Consulta de ganancias</span>
+                    <span class="text-[11px] font-mono text-slate-400">0:04s</span>
+                  </div>
+                  <p class="text-sm font-bold text-brand-dark group-hover:text-brand-navy">"¿Cuánto llevo ganado esta semana?"</p>
+                </button>
+              </div>
+
+              <!-- Teléfono Simulador WhatsApp (6 cols) -->
+              <div class="md:col-span-6 flex justify-center">
+                <div class="w-full max-w-[295px] bg-slate-900 rounded-[2.2rem] p-2 shadow-xl border border-slate-700">
+                  <div class="bg-white rounded-[1.8rem] overflow-hidden">
+                    <div class="bg-[#075E54] text-white px-3.5 py-2.5 flex items-center justify-between">
+                      <div class="flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full bg-white text-brand-navy font-display font-extrabold text-[11px] flex items-center justify-center">MN</div>
+                        <div>
+                          <p class="text-xs font-bold leading-none">Mi Negocio IA</p>
+                          <p id="demo-wa-status" class="text-[10px] text-emerald-200 mt-0.5">en línea</p>
+                        </div>
+                      </div>
+                      <span class="w-2 h-2 rounded-full bg-brand-green"></span>
+                    </div>
+
+                    <div id="demo-chat-feed" class="wa-wallpaper p-3 min-h-[295px] flex flex-col justify-end space-y-2.5 text-xs">
+                      <!-- Contenido dinámico JS -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Panel Derecho (5 cols): Dashboard Vivo "Resumen de la Semana" -->
+          <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 shadow-saas border border-slate-200/90">
+            <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-100">
+              <div>
+                <span class="text-[11px] font-bold text-brand-teal uppercase tracking-wider">2. Vista automática</span>
+                <h3 class="text-lg font-extrabold text-brand-dark">Resumen de la Semana</h3>
+              </div>
+              <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/70">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-green animate-ping"></span>
+                En vivo
+              </span>
+            </div>
+
+            <!-- Tarjeta Métrica Principal USD -->
+            <div class="bg-gradient-to-br from-slate-50 to-emerald-50/50 rounded-2xl p-5 border border-slate-200/80 mb-5">
+              <p class="text-xs font-semibold text-slate-500 uppercase">Ganancias netas acumuladas</p>
+              <div class="flex items-baseline justify-between mt-1.5">
+                <span id="dash-profit" class="font-display text-3xl sm:text-4xl font-extrabold text-brand-dark">$542.50</span>
+                <span id="dash-badge" class="text-xs font-bold text-emerald-700 bg-emerald-100/90 px-2.5 py-1 rounded-full">
+                  ↑ +18% vs. sem. pasada
+                </span>
+              </div>
+              <p id="dash-activity" class="text-xs text-slate-600 mt-2.5 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-brand-teal"></span>
+                <span>Último registro: +$8.25 (Arroz y Aceite)</span>
+              </p>
+            </div>
+
+            <!-- Alertas de Productos por Reponer con Barras de Progreso -->
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <p class="text-xs font-bold text-brand-dark uppercase tracking-wide">Productos por reponer</p>
+                <span class="text-[11px] text-slate-400">Nivel de inventario</span>
+              </div>
+
+              <div id="dash-stock-bars" class="space-y-3.5 text-xs">
+                <!-- Se actualiza vía JS -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         4. ¿CÓMO FUNCIONA? (PASO A PASO EN 3 PASOS CONECTADOS)
+         ------------------------------------------------------------------- -->
+    <section id="como-funciona" class="py-20 sm:py-28 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <span class="inline-block text-brand-teal font-bold text-xs uppercase tracking-widest mb-2">Cero curva de aprendizaje</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-brand-dark mb-4">
+            Empieza en 3 pasos tan simples como mandar un audio
+          </h2>
+          <p class="text-slate-600 text-base">
+            No necesitas computadora, ni lectores de códigos, ni capacitaciones largas.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <!-- Línea conectora en escritorio -->
+          <div class="hidden md:block absolute top-14 left-[18%] right-[18%] h-0.5 bg-gradient-to-r from-brand-navy via-brand-teal to-brand-green opacity-30"></div>
+
+          <!-- Paso 1 -->
+          <div class="relative bg-white rounded-3xl p-8 border border-slate-200/90 shadow-saas hover:border-brand-teal/50 transition-all text-center">
+            <div class="w-12 h-12 rounded-2xl bg-brand-navy text-white font-display font-extrabold text-lg flex items-center justify-center mx-auto mb-6 shadow-md relative z-10">01</div>
+            <div class="w-14 h-14 rounded-2xl bg-teal-50 text-brand-teal flex items-center justify-center mx-auto mb-4 text-2xl">🎙️</div>
+            <h3 class="text-xl font-bold text-brand-dark mb-2.5">Mandas tu nota de voz</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              En tu WhatsApp de siempre, sin instalar nada, grabas un audio corto contando qué vendiste o qué compraste.
+            </p>
+          </div>
+
+          <!-- Paso 2 -->
+          <div class="relative bg-white rounded-3xl p-8 border border-slate-200/90 shadow-saas hover:border-brand-teal/50 transition-all text-center">
+            <div class="w-12 h-12 rounded-2xl bg-brand-teal text-white font-display font-extrabold text-lg flex items-center justify-center mx-auto mb-6 shadow-md relative z-10">02</div>
+            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-brand-navy flex items-center justify-center mx-auto mb-4 text-2xl">🧠</div>
+            <h3 class="text-xl font-bold text-brand-dark mb-2.5">Nuestra IA lo procesa al instante</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Entiende modismos salvadoreños, cantidades y precios en segundos, devolviéndote un mensaje claro de confirmación.
+            </p>
+          </div>
+
+          <!-- Paso 3 -->
+          <div class="relative bg-white rounded-3xl p-8 border border-slate-200/90 shadow-saas hover:border-brand-teal/50 transition-all text-center">
+            <div class="w-12 h-12 rounded-2xl bg-brand-green text-white font-display font-extrabold text-lg flex items-center justify-center mx-auto mb-6 shadow-md relative z-10">03</div>
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-brand-green flex items-center justify-center mx-auto mb-4 text-2xl">📊</div>
+            <h3 class="text-xl font-bold text-brand-dark mb-2.5">Tu inventario y ganancias al día</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Recibes alertas cuando toca surtir y un reporte automático semanal con tus ganancias netas sin hacer una sola suma.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         5. DESGLOSE DE VALOR (ANCLAJE DE PRECIO SAAS MODERNO)
+         ------------------------------------------------------------------- -->
+    <section id="precios" class="py-20 sm:py-28 bg-brand-surface border-y border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="text-center mb-12">
+          <span class="inline-block text-brand-teal font-bold text-xs uppercase tracking-widest mb-2">Transparencia total</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-brand-dark mb-3">
+            Todo el control de tu negocio por menos de $0.45 al día
+          </h2>
+          <p class="text-slate-600 text-base">
+            Empieza con 14 días totalmente gratis y descubre la tranquilidad de tener tus números claros.
+          </p>
+        </div>
+
+        <!-- Card con borde degradado Azul Marino a Verde Esmeralda -->
+        <div class="p-[2px] rounded-[2rem] bg-gradient-to-r from-brand-navy via-brand-teal to-brand-green shadow-2xl shadow-blue-950/10">
+          <div class="bg-white rounded-[1.9rem] p-7 sm:p-11">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-6 mb-7 border-b border-slate-100">
+              <div>
+                <h3 class="text-2xl font-extrabold text-brand-dark">Plan Emprendedor Completo</h3>
+                <p class="text-sm text-slate-500">Acceso ilimitado para tiendas, comedores y negocios locales</p>
+              </div>
+              <span class="bg-gradient-to-r from-brand-teal to-brand-green text-white text-xs font-extrabold px-4 py-1.5 rounded-full uppercase tracking-wide shadow-sm">
+                Oferta de Lanzamiento
+              </span>
+            </div>
+
+            <!-- Desglose con Anclaje -->
+            <div class="space-y-4 mb-8">
+              <div class="flex items-center justify-between text-sm sm:text-base py-2 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">✓</span>
+                  <span class="font-medium text-slate-800">Plataforma SaaS en la nube 24/7 vía WhatsApp</span>
+                </div>
+                <span class="text-slate-400 line-through font-semibold">$50.00/mes</span>
+              </div>
+
+              <div class="flex items-center justify-between text-sm sm:text-base py-2 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">✓</span>
+                  <span class="font-medium text-slate-800">Transcripción y reconocimiento de voz con IA</span>
+                </div>
+                <span class="text-slate-400 line-through font-semibold">$20.00/mes</span>
+              </div>
+
+              <div class="flex items-center justify-between text-sm sm:text-base py-2 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">✓</span>
+                  <span class="font-medium text-slate-800">Reportes semanales y soporte personalizado</span>
+                </div>
+                <span class="text-slate-400 line-through font-semibold">$10.00/mes</span>
+              </div>
+            </div>
+
+            <!-- Comparación Precio Real vs Oferta -->
+            <div class="bg-slate-50 rounded-2xl p-6 text-center border border-slate-200/80 mb-8">
+              <p class="text-sm text-slate-500">
+                Valor real total del paquete: <span class="line-through text-rose-500 font-bold">$80.00/mes</span>
+              </p>
+              <div class="mt-2 flex items-baseline justify-center gap-1.5">
+                <span class="text-sm font-bold text-brand-navy uppercase mr-1">Hoy por solo</span>
+                <span class="font-display text-5xl sm:text-6xl font-extrabold text-brand-dark">$12.00</span>
+                <span class="text-base font-bold text-slate-600">/ mes <span class="text-xs font-normal">(+ IVA)</span></span>
+              </div>
+              <p class="text-xs font-semibold text-brand-teal mt-2">
+                Incluye 14 días de prueba gratis • Cancela cuando quieras en 1 clic
+              </p>
+            </div>
+
+            <!-- CTA Directo al Checkout -->
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button onclick="switchView('checkout', 'trial')" class="btn-shimmer flex-1 bg-gradient-to-r from-brand-navy to-brand-teal hover:brightness-105 text-white font-bold text-base py-4 px-6 rounded-2xl shadow-lg shadow-brand-navy/20 transition-all">
+                Activar mis 14 días GRATIS →
+              </button>
+              <button onclick="switchView('checkout', 'direct')" class="sm:w-auto bg-white hover:bg-slate-50 text-brand-dark font-semibold text-sm py-4 px-6 rounded-2xl border border-slate-300 transition-all">
+                Suscribirme hoy ($12 + IVA)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         6. PRUEBA SOCIAL (ANTES VS DESPUÉS CON MÉTRICAS + BUYER PERSONAS)
+         ------------------------------------------------------------------- -->
+    <section class="py-20 sm:py-28 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="text-center max-w-3xl mx-auto mb-14">
+          <span class="inline-block text-brand-teal font-bold text-xs uppercase tracking-widest mb-2">Resultados medibles</span>
+          <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-brand-dark mb-4">
+            El impacto real en negocios salvadoreños
+          </h2>
+          <p class="text-slate-600 text-base">
+            Compara el antes y después de dejar el cuaderno tradicional y pásate al control por voz.
+          </p>
+        </div>
+
+        <!-- Switcher / Comparativa Antes vs Después -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          <div class="rounded-3xl p-7 bg-slate-50 border border-slate-200">
+            <span class="inline-block bg-slate-200 text-slate-700 font-bold text-xs px-3 py-1 rounded-full mb-4">ANTES • SIN MI NEGOCIO</span>
+            <div class="grid grid-cols-2 gap-4 mb-5">
+              <div class="bg-white p-4 rounded-2xl border border-slate-200/80">
+                <p class="font-display text-2xl sm:text-3xl font-extrabold text-rose-600">45 min/día</p>
+                <p class="text-xs text-slate-500 mt-1">Perdidos cuadrando cuentas cada noche</p>
+              </div>
+              <div class="bg-white p-4 rounded-2xl border border-slate-200/80">
+                <p class="font-display text-2xl sm:text-3xl font-extrabold text-rose-600">20% merma</p>
+                <p class="text-xs text-slate-500 mt-1">Pérdida desconocida de inventario</p>
+              </div>
+            </div>
+            <p class="text-sm text-slate-600">Cuentas anotadas en libretas con tachones, ventas fiadas olvidadas y compras de emergencia de último minuto.</p>
+          </div>
+
+          <div class="rounded-3xl p-7 bg-gradient-to-br from-emerald-50/80 to-teal-50/70 border-2 border-brand-teal/60">
+            <span class="inline-block bg-brand-teal text-white font-bold text-xs px-3 py-1 rounded-full mb-4">DESPUÉS • CON MI NEGOCIO IA</span>
+            <div class="grid grid-cols-2 gap-4 mb-5">
+              <div class="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-sm">
+                <p class="font-display text-2xl sm:text-3xl font-extrabold text-brand-teal">0 min/día</p>
+                <p class="text-xs text-slate-500 mt-1">Todo se suma solo con notas de voz</p>
+              </div>
+              <div class="bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-sm">
+                <p class="font-display text-2xl sm:text-3xl font-extrabold text-brand-green">100% control</p>
+                <p class="text-xs text-slate-500 mt-1">Visibilidad total de ganancias e inventario</p>
+              </div>
+            </div>
+            <p class="text-sm text-slate-700 font-medium">Cierre de caja instantáneo, alertas automáticas de surtido y tranquilidad financiera cada semana.</p>
+          </div>
+        </div>
+
+        <!-- 3 Testimonios Buyer Personas Salvadoreños -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Buyer Persona 1 -->
+          <div class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-saas flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="text-amber-400 text-sm tracking-wider">★★★★★</div>
+                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">Ahorra 5 hrs/sem</span>
+              </div>
+              <p class="text-sm text-slate-700 leading-relaxed mb-6">
+                "Antes tenía tres cuadernos y nunca sabía cuánto ganaba libre. Ahora mando un audio rápido por WhatsApp entre cliente y cliente y el domingo ya tengo mi resumen listo."
+              </p>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+              <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-navy to-brand-teal text-white font-display font-bold flex items-center justify-center text-sm">DC</div>
+              <div>
+                <p class="font-bold text-brand-dark text-sm">Doña Carmen</p>
+                <p class="text-xs text-slate-500">Tienda La Bendición • San Miguel</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buyer Persona 2 -->
+          <div class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-saas flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="text-amber-400 text-sm tracking-wider">★★★★★</div>
+                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">+22% margen neto</span>
+              </div>
+              <p class="text-sm text-slate-700 leading-relaxed mb-6">
+                "En el comedor a mediodía no da tiempo de tocar una computadora. Solo digo qué platos salieron y qué compré en el mercado, y me avisa cuando queda poco aceite o arroz."
+              </p>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+              <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-teal to-brand-green text-white font-display font-bold flex items-center justify-center text-sm">CM</div>
+              <div>
+                <p class="font-bold text-brand-dark text-sm">Carlos Mendoza</p>
+                <p class="text-xs text-slate-500">Comedor El Buen Sabor • Usulután</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buyer Persona 3 -->
+          <div class="bg-white rounded-3xl p-7 border border-slate-200/90 shadow-saas flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <div class="text-amber-400 text-sm tracking-wider">★★★★★</div>
+                <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">0 quiebres de stock</span>
+              </div>
+              <p class="text-sm text-slate-700 leading-relaxed mb-6">
+                "Probé sistemas de punto de venta bien caros y complicados. Mi Negocio es súper práctico porque ya uso WhatsApp todo el día. Me ordenó el inventario desde la primera semana."
+              </p>
+            </div>
+            <div class="flex items-center gap-3 pt-4 border-t border-slate-100">
+              <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-dark to-brand-navy text-white font-display font-bold flex items-center justify-center text-sm">SR</div>
+              <div>
+                <p class="font-bold text-brand-dark text-sm">Sofía Ramírez</p>
+                <p class="text-xs text-slate-500">Mini Súper Central • San Salvador</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         7. PREGUNTAS FRECUENTES (8 PREGUNTAS EN ACORDEÓN FLUIDO)
+         ------------------------------------------------------------------- -->
+    <section id="faq" class="py-20 sm:py-28 bg-brand-surface border-t border-slate-200/80">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 reveal">
+        <div class="text-center mb-12">
+          <span class="inline-block text-brand-teal font-bold text-xs uppercase tracking-widest mb-2">Dudas resueltas</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-brand-dark mb-3">
+            Preguntas Frecuentes
+          </h2>
+          <p class="text-slate-600 text-base">
+            Todo lo que necesitas saber antes de activar tus 14 días gratuitos.
+          </p>
+        </div>
+
+        <div class="space-y-3" id="faq-accordion">
+          <!-- 1 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(0)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>1. ¿Necesito descargar alguna app nueva en mi teléfono?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              No. Todo funciona directamente dentro de tu <strong>WhatsApp</strong> normal. No gastas memoria de tu celular ni tienes que aprender a usar pantallas complicadas.
+            </div>
+          </div>
+
+          <!-- 2 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(1)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>2. ¿Entiende mi forma de hablar o el ruido normal de la tienda?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              Sí. Nuestra IA está entrenada con modismos salvadoreños ("un cartón de huevos", "dos libras de frijoles", "tres sodas") y filtra el ruido ambiente del local. Siempre te responde con un resumen para confirmar que todo quedó exacto.
+            </div>
+          </div>
+
+          <!-- 3 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(2)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>3. ¿Mis datos financieros y ventas están seguros y privados?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              Totalmente. Toda tu información se almacena con cifrado bancario en la nube. Nadie externo tiene acceso a tus números; tus datos son 100% tuyos y los cuidamos como si fueran nuestros.
+            </div>
+          </div>
+
+          <!-- 4 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(3)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>4. ¿Qué pasa si me equivoco al dictar un audio?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              Es súper fácil corregirlo: solo envías otro audio o mensaje diciendo <em>"Corrige la última venta, eran 2 aceites en vez de 3"</em> o <em>"Borra el último registro"</em> y el sistema lo ajusta al instante.
+            </div>
+          </div>
+
+          <!-- 5 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(4)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>5. ¿Puedo usarlo si tengo poca señal de internet o paquete prepago?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              ¡Claro! Una nota de voz de 6 segundos pesa apenas unos kilobytes y funciona perfectamente con los paquetes de WhatsApp ilimitado o datos móviles básicos en cualquier zona de El Salvador.
+            </div>
+          </div>
+
+          <!-- 6 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(5)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>6. ¿Cómo cancelo mi suscripción si decido no continuar?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              Sin contratos ni llamadas incómodas. Puedes cancelar en cualquier momento escribiendo <strong>"Cancelar suscripción"</strong> en el mismo chat o desde tu panel con un solo clic, sin penalizaciones.
+            </div>
+          </div>
+
+          <!-- 7 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(6)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>7. ¿Necesito saber de contabilidad o finanzas para entender los reportes?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              Para nada. Te hablamos en lenguaje claro y cotidiano: cuánto vendiste, cuánto gastaste en mercadería, cuánto te quedó de ganancia libre y qué productos debes pedirle al proveedor.
+            </div>
+          </div>
+
+          <!-- 8 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm">
+            <button onclick="toggleFaqItem(7)" class="w-full px-6 py-4.5 text-left flex items-center justify-between gap-4 font-bold text-brand-dark text-sm sm:text-base hover:bg-slate-50/80 transition-colors">
+              <span>8. ¿Funciona en cualquier celular (Android o iPhone)?</span>
+              <span class="faq-symbol text-brand-teal text-xl font-bold">+</span>
+            </button>
+            <div class="faq-panel hidden px-6 pb-5 pt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100">
+              Sí. Si tu teléfono puede enviar una nota de voz por WhatsApp, es 100% compatible con Mi Negocio, sin importar si es un modelo sencillo de Android o un iPhone.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------------------------------------------------
+         8. GARANTÍA Y CTA FINAL (BANNER OSCURO #081E45 ESTILO VERCEL)
+         ------------------------------------------------------------------- -->
+    <section class="py-20 sm:py-28 bg-brand-dark bg-dot-grid-dark text-white relative overflow-hidden">
+      <!-- Resplandor radial -->
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] rounded-full bg-brand-teal/15 blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 reveal">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-brand-teal/40 px-4 py-2 rounded-full text-brand-green font-bold text-xs sm:text-sm mb-6">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+          <span>GARANTÍA: 14 DÍAS 100% GRATIS, SIN COMPROMISOS NI LETRAS PEQUEÑAS</span>
+        </div>
+
+        <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight mb-6">
+          Deja el cuaderno atrás y toma el control de tus ganancias hoy
+        </h2>
+
+        <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Tus datos son tuyos y los cuidamos como si fueran nuestros. Prueba la plataforma durante 14 días sin pagar hoy y comprueba lo fácil que es administrar tu negocio por voz.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button onclick="switchView('checkout', 'trial')" class="btn-shimmer w-full sm:w-auto bg-gradient-to-r from-brand-teal to-brand-green hover:brightness-105 text-brand-dark font-extrabold text-lg px-9 py-4 rounded-2xl shadow-glow transition-all transform hover:-translate-y-0.5">
+            Comenzar prueba gratis ahora →
+          </button>
+          <button onclick="switchView('checkout', 'direct')" class="w-full sm:w-auto bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold text-base px-7 py-4 rounded-2xl transition-all">
+            Ir a Página de Pago
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       VISTA 2: PÁGINA DE PAGO (CHECKOUT) INTERACTIVA ESTILO STRIPE
+       ===================================================================== -->
+  <section id="checkout-view" class="hidden min-h-screen bg-brand-surface bg-dot-grid py-10 sm:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Bar Checkout -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <button onclick="switchView('landing')" class="inline-flex items-center gap-2 text-sm font-bold text-brand-dark hover:text-brand-teal bg-white px-4 py-2.5 rounded-xl border border-slate-200 shadow-sm transition-all">
+          <span>← Volver a la página</span>
+        </button>
+
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3.5 py-2 rounded-xl">
+            <svg class="w-4 h-4 text-brand-teal" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+            <span>Pago encriptado SSL 256-bit</span>
+          </span>
+          <span class="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-3.5 py-2 rounded-xl">
+            🛡️ PCI-DSS Compliant
+          </span>
+        </div>
+      </div>
+
+      <!-- Contenedor Principal 2 Columnas -->
+      <div id="checkout-main-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- COLUMNA IZQUIERDA (5 cols): Resumen del Pedido + Toggle Prueba Gratis -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 shadow-saas border border-slate-200/90 space-y-6">
+          <div>
+            <span class="inline-block bg-brand-navy/10 text-brand-navy text-xs font-bold px-3 py-1 rounded-full mb-2">Resumen del Pedido</span>
+            <h2 class="text-2xl font-extrabold text-brand-dark">Mi Negocio — Plan Emprendedor</h2>
+            <p class="text-xs text-slate-500 mt-1">Asesor financiero y control de inventario por WhatsApp IA</p>
+          </div>
+
+          <!-- Toggle Modalidad de Cobro -->
+          <div class="bg-slate-100 p-1.5 rounded-2xl grid grid-cols-2 gap-1.5">
+            <button type="button" onclick="updateCheckoutPlan('trial')" id="toggle-trial" class="py-2.5 px-3 rounded-xl text-xs font-bold bg-white text-brand-dark shadow-sm transition-all">
+              🎁 Prueba 14 días ($0 hoy)
+            </button>
+            <button type="button" onclick="updateCheckoutPlan('direct')" id="toggle-direct" class="py-2.5 px-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-brand-dark transition-all">
+              ⚡ Pago mensual hoy
+            </button>
+          </div>
+
+          <!-- Desglose Numérico Claro -->
+          <div class="space-y-3 text-sm border-y border-slate-100 py-5">
+            <div class="flex justify-between text-slate-600">
+              <span>Suscripción mensual SaaS</span>
+              <span class="font-semibold text-slate-900">$12.00 USD</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>IVA (13% El Salvador)</span>
+              <span class="font-semibold text-slate-900">$1.56 USD</span>
+            </div>
+            <div class="flex justify-between text-slate-600">
+              <span>Subtotal mensual</span>
+              <span class="font-semibold text-slate-900">$13.56 USD</span>
+            </div>
+            <div id="row-trial-credit" class="flex justify-between text-brand-teal font-bold pt-1">
+              <span>Crédito Prueba Gratis (14 días)</span>
+              <span>-$13.56 USD</span>
+            </div>
+          </div>
+
+          <!-- Total Hoy -->
+          <div>
+            <div class="flex items-baseline justify-between">
+              <span class="text-sm font-bold text-slate-700">Total a pagar hoy</span>
+              <span id="checkout-due-today" class="font-display text-4xl font-extrabold text-brand-teal">$0.00</span>
+            </div>
+            <p id="checkout-subtext" class="text-xs text-slate-500 mt-2">
+              No se te cobrará nada hoy. A partir del día 15 se renovará por $13.56/mes (IVA incluido) salvo que canceles antes.
+            </p>
+          </div>
+
+          <!-- Beneficios Incluidos y Sellos de Garantía -->
+          <div class="bg-slate-50 rounded-2xl p-4 space-y-2.5 border border-slate-200/80 text-xs text-slate-700">
+            <p class="font-bold text-brand-dark uppercase tracking-wider text-[11px]">Tu suscripción incluye:</p>
+            <div class="flex items-center gap-2"><span class="text-brand-green font-bold">✓</span> Notas de voz ilimitadas en WhatsApp</div>
+            <div class="flex items-center gap-2"><span class="text-brand-green font-bold">✓</span> Control de inventario con alertas automáticas</div>
+            <div class="flex items-center gap-2"><span class="text-brand-green font-bold">✓</span> Reportes semanales y mensuales de ganancias</div>
+            <div class="flex items-center gap-2"><span class="text-brand-green font-bold">✓</span> Garantía de cancelación en 1 clic sin costo</div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA (7 cols): Tarjeta Virtual 3D + Formulario de Pago -->
+        <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 shadow-saas border border-slate-200/90">
+          
+          <!-- Tarjeta Bancaria Virtual Interactiva en Vivo -->
+          <div class="mb-7">
+            <div id="virtual-card" class="w-full max-w-md mx-auto rounded-2xl p-6 text-white bg-gradient-to-br from-brand-dark via-brand-navy to-brand-teal shadow-card3d relative overflow-hidden transition-all duration-300">
+              <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10 blur-xl"></div>
+              <div class="flex items-center justify-between mb-6 relative z-10">
+                <!-- Chip EMV -->
+                <div class="w-11 h-8 rounded-md bg-gradient-to-tr from-amber-200 to-yellow-400 border border-yellow-500/40 flex items-center justify-center">
+                  <div class="w-7 h-5 border border-yellow-700/40 rounded-xs"></div>
+                </div>
+                <span id="vcard-brand-label" class="font-display font-extrabold text-lg tracking-wider italic">VISA</span>
+              </div>
+
+              <p id="vcard-number" class="font-mono text-lg sm:text-2xl tracking-widest mb-6 relative z-10">
+                4532 •••• •••• 8890
+              </p>
+
+              <div class="flex items-end justify-between text-xs relative z-10">
+                <div>
+                  <p class="text-[10px] uppercase text-blue-200 tracking-wider">Titular de la tarjeta</p>
+                  <p id="vcard-holder" class="font-bold text-sm uppercase tracking-wide mt-0.5 truncate max-w-[200px]">BLANCA ARGUETA</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-[10px] uppercase text-blue-200 tracking-wider">Expira</p>
+                  <p id="vcard-expiry" class="font-mono font-bold text-sm mt-0.5">09/29</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <form id="stripe-checkout-form" onsubmit="handleCheckoutSubmit(event)" class="space-y-5">
+            <!-- Datos de Contacto -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">Nombre del titular</label>
+                <input type="text" id="field-holder" required placeholder="Ej. Blanca Argueta" oninput="syncVirtualCard()" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1.5">WhatsApp del negocio</label>
+                <div class="flex">
+                  <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-300 bg-slate-50 text-slate-600 text-xs font-bold">🇸🇻 +503</span>
+                  <input type="tel" id="field-whatsapp" required maxlength="9" placeholder="7890-1234" class="w-full px-3.5 py-3 rounded-r-xl border border-slate-300 focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none text-sm">
+                </div>
+              </div>
+            </div>
+
+            <!-- Selector Visual de Marcas de Tarjetas con SVG Nítidos -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label class="block text-xs font-bold text-slate-700 uppercase">Marca de tarjeta</label>
+                <span id="brand-helper-text" class="text-xs font-semibold text-brand-teal">Visa</span>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <!-- VISA -->
+                <button type="button" onclick="chooseBrand('Visa')" id="brand-opt-Visa" class="brand-opt-card flex flex-col items-center justify-center p-3 rounded-xl border-2 border-brand-navy bg-blue-50/40 transition-all">
+                  <svg class="h-5 w-auto" viewBox="0 0 64 20" fill="none">
+                    <text x="4" y="16" fill="#1A1F71" font-family="Plus Jakarta Sans, sans-serif" font-weight="800" font-size="18" font-style="italic">VISA</text>
+                  </svg>
+                  <span class="text-[10px] font-semibold text-slate-600 mt-1">Visa</span>
+                </button>
+
+                <!-- MASTERCARD -->
+                <button type="button" onclick="chooseBrand('Mastercard')" id="brand-opt-Mastercard" class="brand-opt-card flex flex-col items-center justify-center p-3 rounded-xl border-2 border-slate-200 hover:border-slate-300 transition-all">
+                  <svg class="h-5 w-auto" viewBox="0 0 44 24" fill="none">
+                    <circle cx="16" cy="12" r="9" fill="#EB001B"/>
+                    <circle cx="28" cy="12" r="9" fill="#F79E1B" fill-opacity="0.9"/>
+                  </svg>
+                  <span class="text-[10px] font-semibold text-slate-600 mt-1">Mastercard</span>
+                </button>
+
+                <!-- AMERICAN EXPRESS -->
+                <button type="button" onclick="chooseBrand('American Express')" id="brand-opt-American Express" class="brand-opt-card flex flex-col items-center justify-center p-3 rounded-xl border-2 border-slate-200 hover:border-slate-300 transition-all">
+                  <svg class="h-5 w-auto" viewBox="0 0 56 20" fill="none">
+                    <rect width="56" height="20" rx="4" fill="#006FCF"/>
+                    <text x="8" y="14" fill="#FFFFFF" font-family="Plus Jakarta Sans, sans-serif" font-weight="800" font-size="11">AMEX</text>
+                  </svg>
+                  <span class="text-[10px] font-semibold text-slate-600 mt-1">Amex</span>
+                </button>
+
+                <!-- DÉBITO LOCAL -->
+                <button type="button" onclick="chooseBrand('Débito Local')" id="brand-opt-Débito Local" class="brand-opt-card flex flex-col items-center justify-center p-3 rounded-xl border-2 border-slate-200 hover:border-slate-300 transition-all">
+                  <svg class="h-5 w-auto" viewBox="0 0 68 20" fill="none">
+                    <rect width="68" height="20" rx="4" fill="#00B094"/>
+                    <text x="7" y="14" fill="#FFFFFF" font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="10">DÉBITO SV</text>
+                  </svg>
+                  <span class="text-[10px] font-semibold text-slate-600 mt-1">Débito Local</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Inputs de Tarjeta -->
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/90 space-y-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Número de tarjeta</label>
+                <input type="text" id="field-card-num" required inputmode="numeric" maxlength="19" placeholder="4532 0151 1283 8890" oninput="handleCardNumberInput(this)" class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-brand-teal outline-none text-sm font-mono tracking-wider">
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Expiración (MM/AA)</label>
+                  <input type="text" id="field-expiry" required inputmode="numeric" maxlength="5" placeholder="09/29" oninput="handleExpiryInput(this)" class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-brand-teal outline-none text-sm font-mono text-center">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Código CVV / CVC</label>
+                  <input type="password" id="field-cvv" required inputmode="numeric" maxlength="4" placeholder="•••" class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white focus:border-brand-teal outline-none text-sm font-mono text-center">
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón de Pago -->
+            <button type="submit" id="checkout-submit-btn" class="btn-shimmer w-full bg-gradient-to-r from-brand-navy via-brand-teal to-brand-green hover:brightness-105 text-white font-extrabold text-base py-4 px-6 rounded-2xl shadow-xl shadow-brand-teal/25 transition-all flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+              <span id="checkout-btn-label">Activar prueba gratis ($0.00 hoy)</span>
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Pantalla de Confirmación Exitosa con Recibo Digital -->
+      <div id="checkout-receipt-screen" class="hidden max-w-xl mx-auto bg-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-slate-200 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-emerald-500/15 text-emerald-600 flex items-center justify-center mx-auto mb-5 text-3xl">
+          🎉
+        </div>
+        <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3.5 py-1 rounded-full uppercase mb-3">
+          Suscripción Activada
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-dark mb-3">
+          ¡Todo listo, <span id="receipt-name" class="text-brand-teal">Emprendedor</span>!
+        </h2>
+        <p class="text-sm text-slate-600 mb-6">
+          Acabamos de vincular tu número de WhatsApp <strong id="receipt-phone" class="text-brand-dark">+503 7890-1234</strong> con nuestro asistente inteligente.
+        </p>
+
+        <!-- Recibo Digital -->
+        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-left text-xs sm:text-sm space-y-2.5 mb-7">
+          <div class="flex justify-between pb-2 border-b border-slate-200">
+            <span class="text-slate-500">N.º de Recibo:</span>
+            <span class="font-mono font-bold text-brand-dark" id="receipt-id">#MN-2026-8492</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Plan:</span>
+            <span class="font-bold text-brand-dark">Mi Negocio Emprendedor</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Método de pago:</span>
+            <span class="font-bold text-brand-dark" id="receipt-method">Visa •••• 8890</span>
+          </div>
+          <div class="flex justify-between pt-2 border-t border-slate-200">
+            <span class="font-bold text-slate-700">Total cobrado hoy:</span>
+            <span class="font-extrabold text-brand-teal" id="receipt-total">$0.00 USD</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="https://wa.me/50300000000?text=Hola%20Mi%20Negocio,%20acabo%20de%20activar%20mi%20cuenta" target="_blank" rel="noopener" class="flex-1 bg-[#25D366] hover:brightness-105 text-white font-bold py-3.5 px-5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+            <span>Abrir WhatsApp ahora</span>
+            <span>↗</span>
+          </a>
+          <button onclick="resetAndBackHome()" class="bg-slate-100 hover:bg-slate-200 text-brand-dark font-bold py-3.5 px-5 rounded-xl transition-all">
+            Volver al inicio
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       FOOTER MODERNO
+       ===================================================================== -->
+  <footer class="bg-brand-dark text-slate-400 pt-14 pb-10 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-10 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2.5 mb-2">
+            <span class="font-display text-2xl font-extrabold text-white">Mi <span class="text-brand-green">negocio</span></span>
+          </div>
+          <p class="text-sm text-slate-400 max-w-md">
+            Tu negocio en buenas manos. Plataforma SaaS de control de ventas e inventario mediante notas de voz en WhatsApp para MYPES en El Salvador.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-6 text-sm font-medium">
+          <a href="#problema" onclick="switchView('landing')" class="hover:text-white transition-colors">Problema</a>
+          <a href="#demo-ia" onclick="switchView('landing')" class="hover:text-white transition-colors">Demo IA</a>
+          <a href="#como-funciona" onclick="switchView('landing')" class="hover:text-white transition-colors">Cómo funciona</a>
+          <a href="#precios" onclick="switchView('landing')" class="hover:text-white transition-colors">Precios</a>
+          <button onclick="switchView('checkout', 'trial')" class="text-brand-green font-bold hover:underline">Checkout / Prueba Gratis</button>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <p>© 2026 Mi Negocio El Salvador • Todos los derechos reservados.</p>
+        <p>Universidad Gerardo Barrios • Facultad de Ciencia y Tecnología</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       JAVASCRIPT: DEMO INTERACTIVA, SCROLL REVEAL, FAQ Y CHECKOUT EN VIVO
+       ===================================================================== -->
+  <script>
+    // 1. Escenarios de la Demo Interactiva (Sección 3)
+    const scenarios = {
+      1: {
+        voiceText: '"Vendí 3 bolsas de arroz y 2 botellas de aceite"',
+        time: '0:07',
+        replyHeader: '✅ ¡Listo! Venta registrada',
+        replyBadge: '+$8.25',
+        replyItems: [
+          '• 3x Bolsa de Arroz Blanco — <strong>$3.75</strong>',
+          '• 2x Botella de Aceite — <strong>$4.50</strong>'
+        ],
+        replyAlert: '📦 Inventario descontado automáticamente.',
+        profit: '$542.50',
+        growth: '↑ +18% vs. sem. pasada',
+        lastMove: 'Último registro: +$8.25 (Arroz y Aceite)',
+        stock: [
+          { label: '🌾 Granos Básicos (Arroz blanco)', qty: '6 bolsas', pct: 25, color: 'bg-amber-500', text: 'text-amber-700' },
+          { label: '🫙 Abarrotes (Aceite vegetal)', qty: '2 botellas', pct: 12, color: 'bg-rose-500', text: 'text-rose-600' },
+          { label: '🥛 Lácteos (Leche y Queso)', qty: '18 unids.', pct: 75, color: 'bg-brand-teal', text: 'text-emerald-700' }
+        ]
+      },
+      2: {
+        voiceText: '"Entraron 20 libras de frijoles y 15 sodas"',
+        time: '0:06',
+        replyHeader: '📥 Surtido sumado al inventario',
+        replyBadge: '+35 unids.',
+        replyItems: [
+          '• +20 lbs de Frijol Rojo de Seda',
+          '• +15 unids. de Soda en lata'
+        ],
+        replyAlert: '✅ Bodega actualizada sin usar hojas de cálculo.',
+        profit: '$542.50',
+        growth: '↑ +18% vs. sem. pasada',
+        lastMove: 'Último registro: Entrada de +20 lbs frijoles y +15 sodas',
+        stock: [
+          { label: '🫘 Granos Básicos (Frijol rojo)', qty: '32 libras', pct: 88, color: 'bg-brand-green', text: 'text-emerald-700' },
+          { label: '🥤 Abarrotes (Sodas y Bebidas)', qty: '22 unids.', pct: 72, color: 'bg-brand-teal', text: 'text-emerald-700' },
+          { label: '🥛 Lácteos (Leche y Queso)', qty: '18 unids.', pct: 75, color: 'bg-brand-teal', text: 'text-emerald-700' }
+        ]
+      },
+      3: {
+        voiceText: '"¿Cuánto llevo ganado esta semana?"',
+        time: '0:04',
+        replyHeader: '📊 Resumen Financiero Semanal',
+        replyBadge: 'Al día',
+        replyItems: [
+          '• Ventas brutas: <strong>$890.00</strong>',
+          '• Compras a proveedores: <strong>$347.50</strong>',
+          '• Ganancia libre neta: <strong>$542.50</strong>'
+        ],
+        replyAlert: '🚀 Vas un 18% arriba respecto a la semana anterior.',
+        profit: '$542.50',
+        growth: '↑ +18% vs. sem. pasada',
+        lastMove: 'Consulta de balance realizada por nota de voz',
+        stock: [
+          { label: '🌾 Granos Básicos (Arroz blanco)', qty: '6 bolsas', pct: 25, color: 'bg-amber-500', text: 'text-amber-700' },
+          { label: '🫙 Abarrotes (Aceite vegetal)', qty: '2 botellas', pct: 12, color: 'bg-rose-500', text: 'text-rose-600' },
+          { label: '🥛 Lácteos (Leche y Queso)', qty: '18 unids.', pct: 75, color: 'bg-brand-teal', text: 'text-emerald-700' }
+        ]
+      }
+    };
+
+    function runDemoScenario(id) {
+      const sc = scenarios[id];
+      if (!sc) return;
+
+      // Estilos de botones activos
+      document.querySelectorAll('.demo-btn').forEach(btn => {
+        btn.classList.remove('border-brand-teal', 'bg-teal-50/40');
+        btn.classList.add('border-slate-200/80', 'bg-white');
+      });
+      const active = document.getElementById(`demo-btn-${id}`);
+      if (active) {
+        active.classList.remove('border-slate-200/80', 'bg-white');
+        active.classList.add('border-brand-teal', 'bg-teal-50/40');
+      }
+
+      const feed = document.getElementById('demo-chat-feed');
+      const status = document.getElementById('demo-wa-status');
+      status.textContent = 'escribiendo...';
+
+      feed.innerHTML = `
+        <div class="ml-auto max-w-[88%] bg-[#DCF8C6] rounded-2xl rounded-tr-sm p-2.5 shadow-sm">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-6 h-6 rounded-full bg-brand-teal text-white flex items-center justify-center text-[10px]">▶</span>
+            <div class="flex items-center gap-0.5 h-4 flex-1">
+              <span class="w-1 h-3 bg-brand-navy/70 rounded-full wave-bar"></span>
+              <span class="w-1 h-4 bg-brand-navy rounded-full wave-bar"></span>
+              <span class="w-1 h-2 bg-brand-navy/60 rounded-full wave-bar"></span>
+              <span class="w-1 h-4 bg-brand-navy/85 rounded-full wave-bar"></span>
+              <span class="w-1 h-3 bg-brand-navy/70 rounded-full wave-bar"></span>
+            </div>
+            <span class="text-[10px] font-bold text-slate-600">${sc.time}</span>
+          </div>
+          <p class="text-[11px] italic text-slate-700 bg-white/75 rounded px-2 py-1">${sc.voiceText}</p>
+        </div>
+      `;
+
+      setTimeout(() => {
+        status.textContent = 'en línea';
+        const listHtml = sc.replyItems.map(i => `<p>${i}</p>`).join('');
+        feed.innerHTML += `
+          <div class="mr-auto max-w-[92%] bg-white rounded-2xl rounded-tl-sm p-3 shadow-sm border border-slate-100">
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-bold text-brand-navy">${sc.replyHeader}</span>
+              <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">${sc.replyBadge}</span>
+            </div>
+            <div class="space-y-0.5 text-[11px] text-slate-600 mb-2">${listHtml}</div>
+            <div class="bg-slate-50 rounded-lg p-1.5 border border-slate-200/80 text-[10px] font-semibold text-brand-dark">
+              ${sc.replyAlert}
+            </div>
+          </div>
+        `;
+      }, 280);
+
+      // Actualizar Dashboard Vivo
+      document.getElementById('dash-profit').textContent = sc.profit;
+      document.getElementById('dash-badge').textContent = sc.growth;
+      document.getElementById('dash-activity').innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-brand-teal"></span>
+        <span>${sc.lastMove}</span>
+      `;
+
+      const stockContainer = document.getElementById('dash-stock-bars');
+      stockContainer.innerHTML = sc.stock.map(item => `
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/70">
+          <div class="flex justify-between font-semibold mb-1.5">
+            <span class="text-slate-800">${item.label}</span>
+            <span class="${item.text} font-bold">${item.qty}</span>
+          </div>
+          <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div class="h-full ${item.color} rounded-full transition-all duration-500" style="width: ${item.pct}%"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 2. Acordeón FAQ (Sección 7)
+    function toggleFaqItem(idx) {
+      const panels = document.querySelectorAll('.faq-panel');
+      const symbols = document.querySelectorAll('.faq-symbol');
+      const isClosed = panels[idx].classList.contains('hidden');
+
+      panels.forEach(p => p.classList.add('hidden'));
+      symbols.forEach(s => s.textContent = '+');
+
+      if (isClosed) {
+        panels[idx].classList.remove('hidden');
+        symbols[idx].textContent = '−';
+      }
+    }
+
+    // 3. Menú Móvil
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    // 4. Navegación SPA Landing <-> Checkout
+    let checkoutPlanMode = 'trial';
+    let selectedBrand = 'Visa';
+
+    function switchView(target, mode = 'trial') {
+      const landing = document.getElementById('landing-view');
+      const checkout = document.getElementById('checkout-view');
+
+      if (target === 'checkout') {
+        landing.classList.add('hidden');
+        checkout.classList.remove('hidden');
+        updateCheckoutPlan(mode);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        checkout.classList.add('hidden');
+        landing.classList.remove('hidden');
+      }
+    }
+
+    function updateCheckoutPlan(mode) {
+      checkoutPlanMode = mode;
+      const tTrial = document.getElementById('toggle-trial');
+      const tDirect = document.getElementById('toggle-direct');
+      const creditRow = document.getElementById('row-trial-credit');
+      const dueToday = document.getElementById('checkout-due-today');
+      const subtext = document.getElementById('checkout-subtext');
+      const btnLabel = document.getElementById('checkout-btn-label');
+
+      if (mode === 'trial') {
+        tTrial.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-white text-brand-dark shadow-sm transition-all';
+        tDirect.className = 'py-2.5 px-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-brand-dark transition-all';
+        creditRow.classList.remove('hidden');
+        dueToday.textContent = '$0.00';
+        dueToday.className = 'font-display text-4xl font-extrabold text-brand-teal';
+        subtext.textContent = 'No se te cobrará nada hoy. A partir del día 15 se renovará por $13.56/mes (IVA incluido) salvo que canceles antes.';
+        btnLabel.textContent = 'Activar prueba gratis ($0.00 hoy)';
+      } else {
+        tDirect.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-white text-brand-dark shadow-sm transition-all';
+        tTrial.className = 'py-2.5 px-3 rounded-xl text-xs font-semibold text-slate-600 hover:text-brand-dark transition-all';
+        creditRow.classList.add('hidden');
+        dueToday.textContent = '$13.56';
+        dueToday.className = 'font-display text-4xl font-extrabold text-brand-navy';
+        subtext.textContent = 'Cobro mensual de $12.00 + $1.56 IVA (13%). Cancela en cualquier momento con un solo mensaje.';
+        btnLabel.textContent = 'Pagar $13.56 USD y activar ahora';
+      }
+    }
+
+    // 5. Tarjeta Virtual 3D y Selector de Marca
+    function chooseBrand(brand) {
+      selectedBrand = brand;
+      document.getElementById('brand-helper-text').textContent = brand;
+      document.getElementById('vcard-brand-label').textContent = brand.toUpperCase();
+
+      document.querySelectorAll('.brand-opt-card').forEach(card => {
+        card.classList.remove('border-brand-navy', 'bg-blue-50/40');
+        card.classList.add('border-slate-200');
+      });
+      const current = document.getElementById(`brand-opt-${brand}`);
+      if (current) {
+        current.classList.remove('border-slate-200');
+        current.classList.add('border-brand-navy', 'bg-blue-50/40');
+      }
+    }
+
+    function syncVirtualCard() {
+      const holderVal = document.getElementById('field-holder').value.trim();
+      document.getElementById('vcard-holder').textContent = holderVal ? holderVal.toUpperCase() : 'BLANCA ARGUETA';
+    }
+
+    function handleCardNumberInput(el) {
+      let digits = el.value.replace(/\D/g, '').substring(0, 16);
+      if (digits.startsWith('4')) chooseBrand('Visa');
+      else if (digits.startsWith('5')) chooseBrand('Mastercard');
+      else if (digits.startsWith('3')) chooseBrand('American Express');
+
+      const grouped = digits.match(/.{1,4}/g)?.join(' ') || '';
+      el.value = grouped;
+      document.getElementById('vcard-number').textContent = grouped || '4532 •••• •••• 8890';
+    }
+
+    function handleExpiryInput(el) {
+      let digits = el.value.replace(/\D/g, '').substring(0, 4);
+      if (digits.length >= 3) {
+        el.value = digits.substring(0, 2) + '/' + digits.substring(2);
+      } else {
+        el.value = digits;
+      }
+      document.getElementById('vcard-expiry').textContent = el.value || '09/29';
+    }
+
+    function handleCheckoutSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('checkout-submit-btn');
+      const label = document.getElementById('checkout-btn-label');
+      const prevText = label.textContent;
+
+      btn.disabled = true;
+      btn.classList.add('opacity-75', 'cursor-wait');
+      label.textContent = 'Procesando encriptación SSL...';
+
+      setTimeout(() => {
+        const name = document.getElementById('field-holder').value.trim() || 'Emprendedor';
+        const phone = document.getElementById('field-whatsapp').value.trim() || '7890-1234';
+        const cardDigits = document.getElementById('field-card-num').value.replace(/\s/g, '');
+        const last4 = cardDigits.slice(-4) || '8890';
+
+        document.getElementById('receipt-name').textContent = name.split(' ')[0];
+        document.getElementById('receipt-phone').textContent = `+503 ${phone}`;
+        document.getElementById('receipt-method').textContent = `${selectedBrand} •••• ${last4}`;
+        document.getElementById('receipt-total').textContent =
+          checkoutPlanMode === 'trial' ? '$0.00 USD (Prueba 14 días)' : '$13.56 USD (IVA incluido)';
+
+        document.getElementById('checkout-main-grid').classList.add('hidden');
+        document.getElementById('checkout-receipt-screen').classList.remove('hidden');
+
+        btn.disabled = false;
+        btn.classList.remove('opacity-75', 'cursor-wait');
+        label.textContent = prevText;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 1100);
+    }
+
+    function resetAndBackHome() {
+      document.getElementById('checkout-receipt-screen').classList.add('hidden');
+      document.getElementById('checkout-main-grid').classList.remove('hidden');
+      document.getElementById('stripe-checkout-form').reset();
+      syncVirtualCard();
+      switchView('landing');
+    }
+
+    // 6. IntersectionObserver para animaciones al hacer scroll + inicialización
+    window.addEventListener('DOMContentLoaded', () => {
+      runDemoScenario(1);
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+  </script>
+</body>
+</html>
